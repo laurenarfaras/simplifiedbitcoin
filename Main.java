@@ -82,7 +82,7 @@ public class Main {
                     String[] tranSplit = line.split(";");
                     System.out.println("transaction split: ");
                     if (tranSplit.length == 5) {
-                      String transactionId = tranSplit[0];
+                      String transactionId = tranSplit[0].replaceAll("\\s+","");
                       System.out.println("transcation ID: " + transactionId);
                       // first transaction doesn't have to have any inputs
                       // can automatically credit accounts
@@ -92,6 +92,11 @@ public class Main {
                         int n = Integer.parseInt(numOuts);
                         String[] balances = parseOutputs(tranSplit[4]);
                         int totalAmount = findTotal(n, balances);
+                        // add transaction to transactions hash table
+                        System.out.println("transaction id: " + transactionId);
+                        System.out.println("total amount: " + totalAmount);
+                        transactions.put(transactionId, totalAmount);
+                        System.out.println("transactions hash: " + transactions);
                         firstTransaction = false;
                       } else {
                         // if not the first transaction in the ledger
@@ -178,6 +183,8 @@ public class Main {
     public static void main(String[] args) {
       firstTransaction = true;
       interactiveMode = false;
+      transactions = new HashMap<>();
+      accounts = new HashMap<>();
         // HashMap<String, Integer> transactions = new HashMap<>();
         // HashMap<String, Integer> accounts = new HashMap<>();
         // boolean firstTransaction = true;
