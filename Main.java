@@ -31,6 +31,29 @@ public class Main {
       return parsed;
     }
 
+    public static void updateAccounts(int n, String[] balances) {
+
+      for (int i = 0; i < n; i++) {
+        String[] accountAndBalance = balances[i].split(",");
+        String username = accountAndBalance[0].replaceAll("\\s+", "");
+        String samount = accountAndBalance[1].replaceAll("\\s+", "");
+        int amount = Integer.parseInt(samount);
+        // check if account already exists
+        if (accounts.containsKey(username)) {
+          // if the account already exists
+          // add balance to current balance
+          int balance = accounts.get(username);
+          balance += amount;
+          accounts.put(username, balance);
+        } else {
+          // if the account doesn't exist
+          // create new key and value pair and add to accounts map
+          accounts.put(username, amount);
+        }
+      }
+
+    }
+
     public static int findTotal(int n, String[] balances) {
       int total = 0;
       System.out.println("balances to be totaled: ");
@@ -74,7 +97,7 @@ public class Main {
                 String fileName = scanner.nextLine();
                 try {
                   File file = new File(fileName);
-            			FileReader fileReader = new FileReader(file);
+                  FileReader fileReader = new FileReader(file);
             			BufferedReader bufferedReader = new BufferedReader(fileReader);
             			StringBuffer stringBuffer = new StringBuffer();
             			String line;
@@ -97,6 +120,9 @@ public class Main {
                         System.out.println("total amount: " + totalAmount);
                         transactions.put(transactionId, totalAmount);
                         System.out.println("transactions hash: " + transactions);
+                        // add balances to accounts hash table
+                        updateAccounts(n, balances);
+                        System.out.println("accounts hash table: " + accounts);
                         firstTransaction = false;
                       } else {
                         // if not the first transaction in the ledger
