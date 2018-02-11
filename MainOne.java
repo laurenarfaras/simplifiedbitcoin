@@ -14,6 +14,7 @@ public class MainOne {
   private static boolean interactiveMode;
   private static HashMap<String, Integer> transactions;
   private static HashMap<String, Integer> accounts;
+  private static String ledger;
 
   public static boolean isWellFormatted(String transactionLine) {
     boolean isWellFormatted = false;
@@ -138,6 +139,7 @@ public class MainOne {
         if (total != -1) {
           // adds the transaction to the transaction hash map
           transactions.put(transactionId, total);
+          ledger = ledger + transactionLine + "\n";
         } else {
           System.err.println("Error: invalid outputs");
         }
@@ -192,6 +194,10 @@ public class MainOne {
         completeTransaction(transactionLine);
         mainMenu();
         break;
+      case "p":
+        System.out.println(ledger);
+        mainMenu();
+        break;
       case "e":
         System.out.println("Goodbye");
         System.exit(0);
@@ -207,6 +213,7 @@ public class MainOne {
     interactiveMode = false;
     transactions = new HashMap<>();
     accounts = new HashMap<>();
+    ledger = "";
     mainMenu();
   }
 
