@@ -21,14 +21,20 @@ public class Main {
 
     public static String[] parseOutputs(String outputs) {
       String[] parsed = outputs.split("\\)");
-      System.out.println("first parsing: ");
+      // System.out.println("first parsing: ");
       for (int i = 0;i < parsed.length ; i++) {
         System.out.println(parsed[i]);
         parsed[i] = parsed[i].replaceAll("\\(", "");
-        System.out.println("without parenthesis");
-        System.out.println(parsed[i]);
+        // System.out.println("without parenthesis");
+        // System.out.println(parsed[i]);
       }
       return parsed;
+    }
+
+    public static boolean areInputsValid(String[] inputs) {
+      boolean isValid = true;
+      // System.out.println("inputs to check if valid: " + inputs);
+      return isValid;
     }
 
     public static void updateAccounts(int n, String[] balances) {
@@ -58,7 +64,7 @@ public class Main {
       int total = 0;
       System.out.println("balances to be totaled: ");
       for (int a = 0; a < balances.length; a++) {
-        System.out.println(balances[a]);
+        // System.out.println(balances[a]);
       }
       for (int s = 0; s < balances.length; s++) {
         String[] accountAndBalance = balances[s].split(",");
@@ -70,8 +76,28 @@ public class Main {
       return total;
     }
 
+    public static int findTotalInputs(int m, String[] inputs) {
+      int total = 0;
+      for (int i = 0; i < m; i++) {
+        String[] totalTransactions = inputs[i].split(",");
+        String tId = totalTransactions[0].replaceAll("\\s+","");
+        System.out.println("input transaction split: " + tId + ": " + totalTransactions[1]);
+        if (transactions.containsKey(tId)) {
+          // if the transaction already exists
+          // add balance to total
+          int balance = transactions.get(tId);
+          total += balance;
+        } else {
+          System.err.println("error: no previous transaction");
+          return -1;
+        }
+      }
+      System.out.println("total inputs: " + total);
+      return total;
+    }
+
     public static void mainMenu() {
-        Scanner scanner = new Scanner(System.in);
+      Scanner scanner = new Scanner(System.in);
 	    // write your code here
 	    System.out.println("[F]ile");
 	    System.out.println("[T]ransaction");
@@ -104,15 +130,19 @@ public class Main {
             			while ((line = bufferedReader.readLine()) != null) {
                     String[] tranSplit = line.split(";");
                     System.out.println("transaction split: ");
-                    if (tranSplit.length == 5) {
-                      String transactionId = tranSplit[0].replaceAll("\\s+","");
+                    String transactionId = tranSplit[0].replaceAll("\\s+","");
+                    // checks to make sure all fields are there
+                    // checks to make sure the id is the correct length (hex form)
+                    if (tranSplit.length == 5 && transactionId.length() == 8) {
+                      String numUtxos = tranSplit[1].replaceAll("\\s+", "");
+                      int m = Integer.parseInt(numUtxos);
+                      String numOuts = tranSplit[3].replaceAll("\\s+", "");
+                      int n = Integer.parseInt(numOuts);
                       System.out.println("transcation ID: " + transactionId);
                       // first transaction doesn't have to have any inputs
                       // can automatically credit accounts
                       if (firstTransaction) {
                         System.out.println("this is the first transaction");
-                        String numOuts = tranSplit[3].replaceAll("\\s+","");
-                        int n = Integer.parseInt(numOuts);
                         String[] balances = parseOutputs(tranSplit[4]);
                         int totalAmount = findTotal(n, balances);
                         // add transaction to transactions hash table
@@ -126,15 +156,26 @@ public class Main {
                         firstTransaction = false;
                       } else {
                         // if not the first transaction in the ledger
+                        System.out.println("this is not the first transaction");
                         // checks to make sure there are inputs for the transaction
-                        if (tranSplit[1].equals("0")) {
+                        if (m == 0) {
                           System.err.println("No UTXOS");
                         } else {
+                          String[] inputs = parseOutputs(tranSplit[2]);
+                          int totalIn = findTotalInputs(m, inputs);
+                          String[] balances = parseOutputs(tranSplit[4]);
+                          int totalOut = findTotal(n, balances);
+                          boolean validInputs = areInputsValid(inputs);
+                          System.out.println("valid inputs? " + validInputs);
+                          if (totalIn == totalOut) {
 
+                          } else {
+                            System.err.println("the total inputs is not equal to the total outputs");
+                          }
                         }
                       }
                     } else {
-                      System.err.println("Error: transaction " + tranSplit[0] + " is not valid");
+                      System.err.println("Error: transaction is mal-formed");
                     }
             				// stringBuffer.append(line);
             				// stringBuffer.append("\n");
