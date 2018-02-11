@@ -198,6 +198,20 @@ public class MainOne {
         System.out.println(ledger);
         mainMenu();
         break;
+      case "h":
+        System.out.println("Command Summary");
+        System.out.println("[F]ile:  Supply filename:<infilename>.  Read in a file of transactions. Any invalid transaction shall be identified with an error message to stderr, but not stored. Print an error message to stderr if the input file named cannot be opened. The message shall be 'Error: file <infilename> cannot be opened for reading' on a single line, where <infilename> is the name provided as additional command input.");
+        System.out.println("[T]ransaction: Supply Transaction:<see format below>   Read in a single transaction in the format shown below.  It shall be checked for validity against the ledger, and added if it is valid. If it is not valid, then do not add it to the ledger and print a message to stderr with the transaction number followed by a colon, a space, and the reason it is invalid on a single line.");
+        System.out.println("[P]rint:  Print current ledger (all transactions in the order they were added) to stdout in the transaction format given below, one transaction per line.");
+        System.out.println("[H]elp:  Command Summary");
+        System.out.println("[D]ump:  Supply filename:<outfilename>.  Dump ledger to the named file. Print an error message to stderr if the output file named cannot be opened. The message shall be 'Error: file <outfilename> cannot be opened for writing' on a single line, where <outfilename> is the name provided as additional command input.");
+        System.out.println("[W]ipe:  Wipe the entire ledger to start fresh.");
+        System.out.println("[I]nteractive: Toggle interactive mode. Start in non-interactive mode, where no command prompts are printed. Print command prompts and prompts for additional input in interactive mode, starting immediately (i.e., print a command prompt following the I command).");
+        System.out.println("[V]erbose: Toggle verbose mode. Start in non-verbose mode. In verbose mode, print additional diagnostic information as you wish. At all times, output each transaction number as it is read in, followed by a colon, a space, and the result ('good' or 'bad').");
+        System.out.println("[B]alance:  Supply username:  (e.g. Alice).  This command prints the current balance of a user.");
+        System.out.println("[E]xit:  Quit the program\n\n");
+        mainMenu();
+        break;
       case "e":
         System.out.println("Goodbye");
         System.exit(0);
