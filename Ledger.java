@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class MainOne {
+public class Ledger {
 
   private static boolean firstTransaction;
   private static boolean interactiveMode;
