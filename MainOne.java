@@ -209,7 +209,19 @@ public class MainOne {
         System.out.println("[I]nteractive: Toggle interactive mode. Start in non-interactive mode, where no command prompts are printed. Print command prompts and prompts for additional input in interactive mode, starting immediately (i.e., print a command prompt following the I command).");
         System.out.println("[V]erbose: Toggle verbose mode. Start in non-verbose mode. In verbose mode, print additional diagnostic information as you wish. At all times, output each transaction number as it is read in, followed by a colon, a space, and the result ('good' or 'bad').");
         System.out.println("[B]alance:  Supply username:  (e.g. Alice).  This command prints the current balance of a user.");
-        System.out.println("[E]xit:  Quit the program\n\n");
+        System.out.println("[E]xit:  Quit the program\n\ng");
+        mainMenu();
+        break;
+      case "d":
+        System.out.print("Supply filename: ");
+        String outFileName = scanner.nextLine();
+        try {
+          BufferedWriter writer = new BufferedWriter(new FileWriter(outFileName));
+          writer.write(ledger);
+          writer.close();
+        } catch (IOException e) {
+          System.err.println("Error: file " + outFileName + " cannot be opened for writing");
+        }
         mainMenu();
         break;
       case "e":
