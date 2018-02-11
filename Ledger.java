@@ -155,23 +155,28 @@ public class Ledger {
 
     Scanner scanner = new Scanner(System.in);
 
-    System.out.println("[F]ile");
-    System.out.println("[T]ransaction");
-    System.out.println("[P]rint");
-    System.out.println("[H]elp");
-    System.out.println("[D]ump");
-    System.out.println("[W]ipe");
-    System.out.println("[I]nteractive");
-    System.out.println("[V]erbose");
-    System.out.println("[B]alance");
-    System.out.println("[E]xit");
-    System.out.print("Select a commmand: ");
+    if (interactiveMode) {
+      System.out.println("[F]ile");
+      System.out.println("[T]ransaction");
+      System.out.println("[P]rint");
+      System.out.println("[H]elp");
+      System.out.println("[D]ump");
+      System.out.println("[W]ipe");
+      System.out.println("[I]nteractive");
+      System.out.println("[V]erbose");
+      System.out.println("[B]alance");
+      System.out.println("[E]xit");
+      System.out.print("Select a commmand: ");
+    }
+
     String command = scanner.next();
     scanner.nextLine();
 
     switch(command.toLowerCase()) {
       case "f":
-        System.out.print("Supply Filename: ");
+        if (interactiveMode) {
+          System.out.print("Supply Filename: ");
+        }
         String fileName = scanner.nextLine();
         try {
           File file = new File(fileName);
@@ -189,7 +194,9 @@ public class Ledger {
         mainMenu();
         break;
       case "t":
-        System.out.print("Enter Transaction: ");
+        if (interactiveMode) {
+          System.out.print("Enter Transaction: ");
+        }
         String transactionLine = scanner.nextLine();
         completeTransaction(transactionLine);
         mainMenu();
@@ -213,7 +220,9 @@ public class Ledger {
         mainMenu();
         break;
       case "d":
-        System.out.print("Supply filename: ");
+        if (interactiveMode) {
+          System.out.print("Supply filename: ");
+        }
         String outFileName = scanner.nextLine();
         try {
           BufferedWriter writer = new BufferedWriter(new FileWriter(outFileName));
@@ -231,6 +240,21 @@ public class Ledger {
         accounts.clear();
         mainMenu();
         break;
+      case "i":
+        if (interactiveMode) {
+          System.out.println("turning off interactive mode");
+          interactiveMode = false;
+        } else {
+          System.out.println("turning on interactive mode");
+          interactiveMode = true;
+        }
+        mainMenu();
+        break;
+      case "v":
+        mainMenu();
+        break;
+      case "b":
+
       case "e":
         System.out.println("Goodbye");
         System.exit(0);
