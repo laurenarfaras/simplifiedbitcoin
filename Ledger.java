@@ -224,6 +224,13 @@ public class Ledger {
         }
         mainMenu();
         break;
+      case "w":
+        ledger = "";
+        firstTransaction = true;
+        transactions.clear();
+        accounts.clear();
+        mainMenu();
+        break;
       case "e":
         System.out.println("Goodbye");
         System.exit(0);
