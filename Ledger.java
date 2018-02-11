@@ -12,6 +12,7 @@ public class Ledger {
 
   private static boolean firstTransaction;
   private static boolean interactiveMode;
+  private static boolean verboseMode;
   private static HashMap<String, Integer> transactions;
   private static HashMap<String, Integer> accounts;
   private static String ledger;
@@ -54,7 +55,9 @@ public class Ledger {
       // check to see if input ids were previous transactions
       for (int i = 0; i < m; i++) {
         if (!transactions.containsKey(inputTransactionIds[i])) {
-          System.out.println("Transaction " + inputTransactionIds[i] + " is not a previous transaction");
+          if (verboseMode) {
+            System.out.println("Transaction " + inputTransactionIds[i] + " is not a previous transaction");
+          }
           arePreviousTransactions = false;
         }
       }
@@ -75,16 +78,25 @@ public class Ledger {
     int[] outputBalances = new int[n];
     if (outputs.length == n) {
       // prints the inputs and outputs
-      System.out.println("inputs: ");
+      if (verboseMode) {
+        System.out.println("inputs: ");
+      }
       for (int i = 0; i < m; i++) {
         inputs[i] = inputs[i].replaceAll("\\(", "");
-        System.out.println(inputs[i]);
+        if (verboseMode) {
+          System.out.println(inputs[i]);
+        }
       }
-      System.out.println("outputs: ");
+      if (verboseMode) {
+        System.out.println("outputs: ");
+      }
       for (int i = 0; i < n; i++) {
         outputs[i] = outputs[i].replaceAll("\\(", "");
-        System.out.println(outputs[i]);
+        if (verboseMode) {
+          System.out.println(outputs[i]);
+        }
       }
+
       // total inputs
       int totalInputs = 0;
       for (int i = 0; i < m; i++) {
@@ -105,8 +117,10 @@ public class Ledger {
         totalOutputs += outputBalances[i];
       }
       // print both totals
-      System.out.println("total inputs: " + totalInputs);
-      System.out.println("total outputs: " + totalOutputs);
+      if (verboseMode) {
+        System.out.println("total inputs: " + totalInputs);
+        System.out.println("total outputs: " + totalOutputs);
+      }
       if (totalInputs == totalOutputs || firstTransaction) {
         total = totalOutputs;
         if (firstTransaction) {
@@ -118,7 +132,9 @@ public class Ledger {
     } else {
       total = -1;
     }
-    System.out.println("total = " + total);
+    if (verboseMode) {
+      System.out.println("total = " + total);
+    }
     return total;
   }
 
@@ -140,14 +156,24 @@ public class Ledger {
           // adds the transaction to the transaction hash map
           transactions.put(transactionId, total);
           ledger = ledger + transactionLine + "\n";
+          System.out.println(transactionId + ": good");
         } else {
-          System.err.println("Error: invalid outputs");
+          if (verboseMode) {
+            System.err.println("Error: invalid outputs");
+          }
+          System.out.println(transactionLine.substring(0, 7) + ": bad");
         }
       } else {
-        System.err.println("Error: invalid inputs");
+        if (verboseMode) {
+          System.err.println("Error: invalid inputs");
+        }
+        System.out.println(transactionLine.substring(0, 7) + ": bad");
       }
     } else {
-      System.err.println("Error: mal-formed transaction");
+      if (verboseMode) {
+        System.err.println("Error: mal-formed transaction");
+      }
+      System.out.println(transactionLine.substring(0, 7) + ": bad");
     }
   }
 
@@ -189,7 +215,9 @@ public class Ledger {
           }
           fileReader.close();
         } catch (IOException e) {
-          System.err.println("Error: file " + fileName + " cannot be opened for reading");
+          if (verboseMode) {
+            System.err.println("Error: file " + fileName + " cannot be opened for reading");
+          }
         }
         mainMenu();
         break;
@@ -229,7 +257,9 @@ public class Ledger {
           writer.write(ledger);
           writer.close();
         } catch (IOException e) {
-          System.err.println("Error: file " + outFileName + " cannot be opened for writing");
+          if (verboseMode) {
+            System.err.println("Error: file " + outFileName + " cannot be opened for writing");
+          }
         }
         mainMenu();
         break;
@@ -251,15 +281,26 @@ public class Ledger {
         mainMenu();
         break;
       case "v":
+        if (verboseMode) {
+          System.out.println("turning off verbose mode");
+          verboseMode = false;
+        } else {
+          System.out.println("turning on verbose mode");
+          verboseMode = true;
+        }
         mainMenu();
         break;
       case "b":
 
       case "e":
-        System.out.println("Goodbye");
+        if (verboseMode) {
+          System.out.println("Goodbye");
+        }
         System.exit(0);
       default:
-        System.out.println("please select a valid option");
+        if (verboseMode) {
+          System.out.println("please select a valid option");
+        }
         mainMenu();
     }
 
@@ -268,6 +309,7 @@ public class Ledger {
   public static void main(String[] args) {
     firstTransaction = true;
     interactiveMode = false;
+    verboseMode = false;
     transactions = new HashMap<>();
     accounts = new HashMap<>();
     ledger = "";
